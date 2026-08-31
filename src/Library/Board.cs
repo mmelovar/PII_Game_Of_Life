@@ -60,6 +60,35 @@ namespace Ucu.Poo.GameOfLife
             return this.cells[x, y];
         }
 
+         /// <summary>
+        /// Cuenta la cantidad de células vecinas vivas que rodean a una posición dada dentro del tablero.
+        /// </summary>
+        /// <param name="x">Coordenada en el eje X (columna) de la célula central.</param>
+        /// <param name="y">Coordenada en el eje Y (fila) de la célula central.</param>
+        /// <returns>La cantidad de células vecinas en estado activo/vivo.</returns>
+    
+        private int CountAliveNeighbors(int x, int y)
+        {
+            int count = 0;
+            for (int i = x - 1; i <= x + 1; i++)
+            {
+                for (int j = y - 1; j <= y + 1; j++)
+                {
+                    if (i == x && j == y)
+                    {
+                        continue; // Excluir la célula actual
+                    }
+
+                    if (i >= 0 && i < this.Width && j >= 0 && j < this.Height && this.cells[i, j])
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+
         /// <summary>
         /// Calcula la siguiente generación del tablero aplicando las reglas del
         /// juego de la vida.
@@ -74,34 +103,20 @@ namespace Ucu.Poo.GameOfLife
             {
                 for (int y = 0; y < boardHeight; y++)
                 {
-                    int aliveNeighbors = 0;
-                    for (int i = x - 1; i <= x + 1; i++)
-                    {
-                        for (int j = y - 1; j <= y + 1; j++)
-                        {
-                            if (i >= 0 && i < boardWidth && j >= 0 && j < boardHeight && this.cells[i, j])
-                            {
-                                aliveNeighbors++;
-                            }
-                        }
-                    }
+                    int aliveNeighbors = this.CountAliveNeighbors(x, y);
+                    bool Alive = this.cells[x, y];
 
-                    if (this.cells[x, y])
-                    {
-                        aliveNeighbors--;
-                    }
-
-                    if (this.cells[x, y] && aliveNeighbors < 2)
+                    if (Alive && aliveNeighbors < 2)
                     {
                         // Célula muere por baja población
                         cloneBoard[x, y] = false;
                     }
-                    else if (this.cells[x, y] && aliveNeighbors > 3)
+                    else if (Alive && aliveNeighbors > 3)
                     {
                         // Célula muere por sobrepoblación
                         cloneBoard[x, y] = false;
                     }
-                    else if (!this.cells[x, y] && aliveNeighbors == 3)
+                    else if (!Alive && aliveNeighbors == 3)
                     {
                         // Célula nace por reproducción
                         cloneBoard[x, y] = true;
