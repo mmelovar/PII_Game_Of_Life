@@ -6,6 +6,23 @@ namespace Ucu.Poo.GameOfLife
     public class GameBoard
     {
         private bool[,] currentBoard;
+        private int width;
+        private int height;
+
+        public int Width
+        {
+            get { return this.width; }
+        }
+
+        public int Height
+        {
+            get { return this.height; }
+        }
+
+        public bool IsAlive(int x, int y)
+        {
+            return this.currentBoard[x, y];
+        }
 
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="GameBoard"/>.
@@ -13,6 +30,8 @@ namespace Ucu.Poo.GameOfLife
         public GameBoard(bool[,] board)
         {
             this.currentBoard = board;
+            this.width = board.GetLength(0);
+            this.height = board.GetLength(1);
         }
 
         /// <summary>
